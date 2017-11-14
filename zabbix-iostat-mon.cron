@@ -1,0 +1,1 @@
+* * * * * root /usr/bin/zabbix-iostat-mon -l /var/log/zabbix-iostat-mon/zabbix-iostat-mon.log
