@@ -136,7 +136,7 @@ func main() {
 }
 
 func iostat() []map[string]string {
-    iostat := strings.Split(execute("iostat -xky 1 2"), "\n")
+    iostat := strings.Split(execute("/usr/bin/iostat -xky 1 2"), "\n")
 
     readFlag := false
     var fields []string
