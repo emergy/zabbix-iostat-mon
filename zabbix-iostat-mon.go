@@ -24,6 +24,7 @@ type Options struct {
     Verbose           bool   `short:"v" long:"verbose"             description:"Verbose mode"`
     PrintOnly         bool   `short:"p" long:"print-only"          description:"No Zabbix Send (print only)"`
     PartSize          int    `short:"s" long:"part-size"           description:"Maximum number of items at a time" default:"200"`
+    Version           bool   `short:"V" long:"version"             description:"Show version"`
 }
 
 type discoveryType struct {
@@ -37,6 +38,8 @@ type senderOutput struct {
 var zaConfig map[string]string
 var opts Options
 
+var Version string
+
 func init() {
     //_ = spew.Sdump("")
 
@@ -46,6 +49,11 @@ func init() {
         } else {
             os.Exit(1)
         }
+    }
+
+    if (opts.Version == true) {
+        fmt.Printf("Version: %s\n", Version)
+        os.Exit(0)
     }
 
     if opts.PartSize > 250 {
@@ -235,12 +243,18 @@ func zabbixSend(server []string, data []string) {
                 log.Printf("Sendindg data to %s\n", zabbixServer)
             }
 
-            verbose := ""
-            if opts.Verbose == true {
-                verbose = "-vv"
+            args := []string{
+                "-z",
+                zabbixServer,
+                "-i",
+                "-",
             }
 
-            cmd := exec.Command("/usr/bin/zabbix_sender", verbose, "-z", zabbixServer, "-i", "-")
+            if opts.Verbose == true {
+                args = append(args, "-vv")
+            }
+
+            cmd := exec.Command("/usr/bin/zabbix_sender", args...)
             stdin, err := cmd.StdinPipe()
 
             if err != nil {

@@ -15,7 +15,7 @@ Source1: %{name}.cron
 Source2: go%{go_version}.linux-amd64.tar.gz
 Source3: gopkgs.tar.gz
 ExclusiveArch: x86_64
-Requires: zabbix-sender >= 2.4, sysstat >= 9.1.2
+Requires: zabbix-sender >= 2.2, sysstat >= 9.1.2
 
 %description
 ostat monitoring for Zabbix
@@ -34,7 +34,7 @@ export GOTOOLDIR="${RPM_BUILD_DIR}/usr/local/go/pkg/tool/linux_amd64"
 export GOPATH="${RPM_BUILD_DIR}/goprj"
 export PATH="$PATH:$GOROOT/bin"
 
-go build -a -ldflags "-B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')" -v -x %{name}
+go build -a -ldflags "-X main.Version=%{version}.%{release} -B 0x$(head -c20 /dev/urandom|od -An -tx1|tr -d ' \n')" -v -x %{name}
 
 %install
 install -d %{buildroot}%{_bindir}
