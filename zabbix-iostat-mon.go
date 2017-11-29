@@ -13,6 +13,7 @@ import (
     "regexp"
     "io"
     "net"
+    "time"
 )
 
 type Options struct {
@@ -23,7 +24,7 @@ type Options struct {
     Logfile           string `short:"l" long:"log-file"            description:"Logfile"                    default:"stdout"`
     Verbose           bool   `short:"v" long:"verbose"             description:"Verbose mode"`
     PrintOnly         bool   `short:"p" long:"print-only"          description:"No Zabbix Send (print only)"`
-    PartSize          int    `short:"s" long:"part-size"           description:"Maximum number of items at a time" default:"200"`
+    PartSize          int    `short:"s" long:"part-size"           description:"Maximum number of items at a time" default:"100"`
     Version           bool   `short:"V" long:"version"             description:"Show version"`
 }
 
@@ -136,6 +137,7 @@ func main() {
         }
 
         zabbixSend(opts.ZabbixServer, itemsHeap[n:i])
+        time.Sleep(2 * time.Second)
 
         if (n == 0) {
             break
